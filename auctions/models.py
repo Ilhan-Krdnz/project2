@@ -10,7 +10,7 @@ class Auctions(models.Model):
     description = models.TextField()
     first_date = models.DateTimeField(auto_now=True)
     starting_price = models.IntegerField()
-    image = models.ImageField(upload_to='uploads/',null=True,blank=True)
+    image = models.ImageField(upload_to='uploads/',)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  
 
     def __str__(self):
@@ -24,3 +24,10 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment_text
 
+class Bid(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    auction = models.ForeignKey(Auctions, on_delete=models.CASCADE,related_name='comments', null=True, blank=True)
+    bid_amount = models.PositiveIntegerField(default=None)
+
+    def __str__(self):
+        return f'{bid_amount} bid by {user} to "{auction}" '

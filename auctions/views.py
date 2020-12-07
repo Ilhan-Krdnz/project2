@@ -69,9 +69,9 @@ def make_listing(request):
     formdata = AuctionForms(request.POST, request.FILES)
     if request.method == "POST":
         if formdata.is_valid():
-            formdata.save(commit=False)
-            formdata.user = request.user
-            formdata.save()
+            auction = formdata.save(commit=False)
+            auction.user = request.user
+            auction.save()
             return HttpResponseRedirect(reverse("index"))
         else:
             formdata = AuctionForms()
@@ -97,3 +97,7 @@ def comment(request, pk):
     "formdata":formdata,
     "auction":formAuction,
     })
+'''def comment_remove(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.delete()
+    return HttpResponseRedirect(reverse("index"))'''
