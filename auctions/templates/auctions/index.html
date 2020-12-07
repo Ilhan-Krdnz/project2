@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <a class="nav-link" href="{% url 'make_listing' %}">Create Listing</a>
+    {% for i in display %}
+    <div>
+    <div>
+    <img src="media/{{ i.image }}" width="200" height="200">    
+    </div>
+    <h1>Listing:{{ i.title }}</h1>
+    <p>{{ i.description }}</p>
+    <h6>Starting Price:{{ i.starting_price }}</h6>
+    <h5>Comment Section</h5>
+    {% for comment in i.comments.all %}
+    <div>{% if comment != Null %}
+    <p>{{ comment.user }}:{{ comment.comment_text }}</p>
+    {% else %}
+    No comments been made
+    {% endif %}
+    </div>
+    {% endfor %}
+    </div>
+    <a class="nav-link" href="{% url 'comment' pk=i.pk %}">Wanna comment to "{{ i.title }}"?</a>
+    {% endfor %}
+{% endblock %}
