@@ -10,7 +10,7 @@ class Auctions(models.Model):
     description = models.TextField()
     first_date = models.DateTimeField(auto_now=True)
     starting_price = models.IntegerField()
-    image = models.ImageField(upload_to='uploads/')
+    image = models.ImageField(upload_to='uploads/',null=True,blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  
 
     def __str__(self):
