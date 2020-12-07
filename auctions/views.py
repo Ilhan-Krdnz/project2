@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from .forms import AuctionForms, CommentForms
+from .forms import AuctionForms, CommentForms, BidForms
 from .models import User, Auctions, Comment
 
 def index(request):
@@ -101,3 +101,19 @@ def comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return HttpResponseRedirect(reverse("index"))'''
+def bidding(request, pk):
+    formdata = BidForms(request.POST or None)
+    formAuction = get_object_or_404(Auctions, pk=pk)
+    if request.method == "POST":
+        the_auction = formdata.save(commit=False)
+        the_auction.user = request.user
+        the_auction.auction = formAuction
+        the_auction.save()
+        HttpResponseRedirect(reverse("index"))
+    else:
+        formdata = BidForms()
+
+    return render(request,"auctions/bidding.html",context={
+        "formdata":formdata,
+        'auction':formAuction,
+        })

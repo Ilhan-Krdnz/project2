@@ -13,6 +13,9 @@
     <p>{{ i.description }}</p>
     <h6>Starting Price:{{ i.starting_price }}$</h6>
     <h5>Comment Section</h5>
+    {% for bid in i.bids.all %}
+    <p>{{ bid.user }}bidded{{ comment.bid_amount }}$</p>
+    {% endfor %}
     {% for comment in i.comments.all %}
     <div>{% if comment != Null %}
     <p>{{ comment.user }}:{{ comment.comment_text }}</p>
@@ -22,6 +25,7 @@
     </div>
     {% endfor %}
     <a class="nav-link" href="{% url 'comment' pk=i.pk %}">Wanna comment to "{{ i.title }}"?</a>
+    <a class="nav-link" href="{% url 'bidding' pk=i.pk %}">Bid to "{{ i.title }}"?</a>
     </div>
     {% endfor %}
 {% endblock %}

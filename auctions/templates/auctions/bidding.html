@@ -1,0 +1,8 @@
+{% extends 'auctions/layout.html' %}
+{% block body %}
+<form action= "{% url 'bidding' pk=auction.pk %}" method = "post">Oi cmon bid
+        {% csrf_token %} 
+        {{ formdata }} 
+        <input type="submit" name="submit"> 
+    </form>
+{% endblock %}
