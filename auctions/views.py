@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from .forms import AuctionForms, CommentForms, BidForms
-from .models import User, Auctions, Comment
+from .models import User, Auctions, Comment, Watchlist
 
 def index(request):
     display = Auctions.objects.all()
@@ -81,6 +81,7 @@ def make_listing(request):
         })
 
 def comment(request, pk):
+    display = Auctions.objects.all()
     formdata = CommentForms(request.POST or None)
     formAuction = get_object_or_404(Auctions, pk=pk)
     if request.method == "POST":
@@ -94,6 +95,7 @@ def comment(request, pk):
             formdata = CommentForms()
 
     return render(request, "auctions/comment.html",context={
+    "display":display,
     "formdata":formdata,
     "auction":formAuction,
     })
@@ -109,11 +111,36 @@ def bidding(request, pk):
         the_auction.user = request.user
         the_auction.auction = formAuction
         the_auction.save()
-        HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("index"))
     else:
         formdata = BidForms()
 
     return render(request,"auctions/bidding.html",context={
         "formdata":formdata,
         'auction':formAuction,
+        })
+
+def add_watchlist(request, pk):
+    the_auction = get_object_or_404(Auctions, pk=pk)
+    if Watchlist.objects.filter(user=request.user, id=the_auction.id).exists():
+                #messages.add_message(request, messages.ERROR, "You already have it in your watchlist.")
+                return HttpResponseRedirect(reverse("auctions:watchlist"))
+    else:
+        the_watchlist = Watchlist(user=request.user)
+        the_watchlist.save()
+        the_watchlist.auction.add(the_auction)
+        return HttpResponseRedirect(reverse('auctions:watchlist'))
+    
+    return render(request, 'auctions/add_watchlist.html',context={
+        'auction':the_auction
+        })
+
+def watchlist(request):
+    display = Watchlist.objects.all()
+    auction_list = []
+    for i in display:
+        auction_list.append(i.auction.get())
+    
+    return render(request,'auctions/watchlist.html',context={
+        'auction_list':auction_list
         })

@@ -1,9 +1,23 @@
 {% extends "auctions/layout.html" %}
-
 {% block body %}
+<style type="text/css">
+    .box-element{
+        background-color: #fff;
+        border-radius: 4px;
+        padding: 10px;
+    }
+    .product{
+        border-radius: 0px 0px 4px 4px;
+    }
+</style>
     <a class="nav-link" href="{% url 'make_listing' %}">Create Listing</a>
+    <a href="{% url 'watchlist' %}">Watchlist</a>
     {% for i in display %}
-    <div class="col-5">
+
+
+    <div class="row">
+    <div class="col-lg-4">
+    <div class="box-element product">
     <div>
     {% if i.image %}
     <img class="rounded" src="media/{{ i.image }}" width="200" height="200">
@@ -12,20 +26,31 @@
     <h1>Listing:{{ i.title }}</h1>
     <p>{{ i.description }}</p>
     <h6>Starting Price:{{ i.starting_price }}$</h6>
-    <h5>Comment Section</h5>
+    <h5>Bids</h5>
+    {% if i.bid == None %}
+    <h6>No bids</h6>
+    {% else %}
     {% for bid in i.bids.all %}
-    <p>{{ bid.user }}bidded{{ comment.bid_amount }}$</p>
+    <p>{{ bid.user }} bidded {{ bid.bid_amount }}$</p>
     {% endfor %}
+    {% endif %}
+    <h5>Comment Section</h5>
     {% for comment in i.comments.all %}
     <div>{% if comment != Null %}
     <p>{{ comment.user }}:{{ comment.comment_text }}</p>
     {% else %}
-    No comments been made
+    <h6>No comments been made</h6>
     {% endif %}
     </div>
     {% endfor %}
+    <a class="nav-link" href="{% url 'add_watchlist' pk=i.pk %}">add to your watchlist</a>
     <a class="nav-link" href="{% url 'comment' pk=i.pk %}">Wanna comment to "{{ i.title }}"?</a>
     <a class="nav-link" href="{% url 'bidding' pk=i.pk %}">Bid to "{{ i.title }}"?</a>
     </div>
+    </div>
+    </div>
+
+
     {% endfor %}
+
 {% endblock %}

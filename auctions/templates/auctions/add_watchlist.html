@@ -1,0 +1,7 @@
+{% extends 'auctions/layout.html' %}
+{% block body %}
+{{ auction.title }}
+{{ auction.image }}
+
+<a href="{% url 'watchlist' auction.pk %}">add to your watchlist</a>
+{% endblock %}

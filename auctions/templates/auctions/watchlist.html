@@ -1,0 +1,18 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+{% for i in auction_list %}
+<div class="row">
+    <div class="col-lg-4">
+    <div class="box-element product">
+    <div>
+    {% if i.image %}
+    <img class="rounded" src="media/{{ i.image }}" width="200" height="200">
+    {% endif %}    
+    </div>
+    <h1>Listing:{{ i.title }}</h1>
+    <p>{{ i.description }}</p>
+    <h6>Starting Price:{{ i.starting_price }}$</h6>
+</div>
+{% endfor %}
+{% endblock %}

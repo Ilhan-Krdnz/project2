@@ -5,6 +5,8 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("<int:pk>/comment",views.comment, name="comment"),
+    path("<int:pk>/add_watchlist",views.add_watchlist, name="add_watchlist"),
+    path("watchlist",views.watchlist,name='watchlist'),
     #path("<int:pk>/comment_remove",views.comment_remove, name="comment_delete"),
     path('<int:pk>/bid',views.bidding, name="bidding"),
     path("create",views.make_listing, name='make_listing'),

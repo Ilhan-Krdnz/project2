@@ -30,4 +30,11 @@ class Bid(models.Model):
     bid_amount = models.PositiveIntegerField(default=None)
 
     def __str__(self):
-        return f'{bid_amount} bid by {user} to "{auction}" '
+        return f'{self.bid_amount} bid by {self.user} to "{self.auction}" '
+
+class Watchlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    auction = models.ManyToManyField(Auctions)
+
+    def __str__(self):
+        return str(self.auction)
