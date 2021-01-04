@@ -9,6 +9,7 @@ class Auctions(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     first_date = models.DateTimeField(auto_now=True)
+    category = models.CharField(max_length=100,default='No category',null=True,blank=True)
     starting_price = models.IntegerField()
     image = models.ImageField(upload_to='uploads/', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  

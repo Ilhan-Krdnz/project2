@@ -26,14 +26,15 @@
     <h1>Listing:{{ i.title }}</h1>
     <p>{{ i.description }}</p>
     <h6>Starting Price:{{ i.starting_price }}$</h6>
+    <h5>listed by {{ i.user }}</h5>
     <h5>Bids</h5>
-    {% if i.bid == None %}
+    {% for bid in i.bids.all %}
+    {% if bid == None %}
     <h6>No bids</h6>
     {% else %}
-    {% for bid in i.bids.all %}
     <p>{{ bid.user }} bidded {{ bid.bid_amount }}$</p>
-    {% endfor %}
     {% endif %}
+    {% endfor %}
     <h5>Comment Section</h5>
     {% for comment in i.comments.all %}
     <div>{% if comment != Null %}

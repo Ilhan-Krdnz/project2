@@ -122,14 +122,21 @@ def bidding(request, pk):
 
 def add_watchlist(request, pk):
     the_auction = get_object_or_404(Auctions, pk=pk)
-    if Watchlist.objects.filter(user=request.user, id=the_auction.id).exists():
-                #messages.add_message(request, messages.ERROR, "You already have it in your watchlist.")
-                return HttpResponseRedirect(reverse("auctions:watchlist"))
+    if 'message' not in request.session:
+        pass
+    request.session['message'] = []
+    
+    for i in Watchlist.objects.all():
+        watchlist_auction = i.auction.get()
+        if the_auction.user == watchlist_auction.user and the_auction.pk == watchlist_auction.pk:
+            #request.session['message'] = 'it is already in your watchlist' 
+            return HttpResponseRedirect(reverse("watchlist"))
     else:
+        message = None
         the_watchlist = Watchlist(user=request.user)
         the_watchlist.save()
         the_watchlist.auction.add(the_auction)
-        return HttpResponseRedirect(reverse('auctions:watchlist'))
+        return HttpResponseRedirect(reverse('watchlist'))
     
     return render(request, 'auctions/add_watchlist.html',context={
         'auction':the_auction
@@ -138,9 +145,12 @@ def add_watchlist(request, pk):
 def watchlist(request):
     display = Watchlist.objects.all()
     auction_list = []
+    #message = request.session['message']
+    # this for loop is a very important lesson
     for i in display:
         auction_list.append(i.auction.get())
     
     return render(request,'auctions/watchlist.html',context={
-        'auction_list':auction_list
+        'auction_list':auction_list,
+        #'message': request.session['message'],
         })

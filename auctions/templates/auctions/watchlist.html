@@ -1,9 +1,12 @@
 {% extends 'auctions/layout.html' %}
 
 {% block body %}
+{% if message is not None %}
+<h1>{{ message }}</h1>
+{% endif %}
 {% for i in auction_list %}
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg">
     <div class="box-element product">
     <div>
     {% if i.image %}
